@@ -7,7 +7,7 @@ import pprint
 import sklearn
 
 t0 = time.time()
-k=50
+k=10
 alpha = .01
 beta = .001
 sampleFile = 'ap.txt'
