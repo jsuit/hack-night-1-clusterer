@@ -7,7 +7,7 @@ import pprint
 import sklearn
 
 t0 = time.time()
-k=10
+k=100
 alpha = .01
 beta = .001
 sampleFile = 'ap.txt'
@@ -37,8 +37,7 @@ for doc_num,words in corpus.docs.iteritems():
 
                 pz = np.divide(np.multiply(DTMatrix[doc_num,:] + alpha,
                         (TTMatrix[vocab_index_dict[word],:] + beta)),DTMatrix.sum(axis=0) + beta*corpus.num_terms)
-
-                sample_pz= np.random.multinomial(1, np.asarray(pz/pz.sum())[0],1)
+                sample_pz= np.random.multinomial(10, np.asarray(pz/pz.sum())[0],1)
                 topic = sample_pz.argmax()
                 #if we've seen the word in the document before and it's been assigned
                 #to a different topic
@@ -52,7 +51,7 @@ for doc_num,words in corpus.docs.iteritems():
 
         #increase counters in matrices
         #increase count in Document topic matrix
-for i in xrange(100):
+for i in xrange(250):
         print i
         for doc_num,words in corpus.docs.iteritems():
                 #words = set(vocab_index_dict.keys()) & set(words)
@@ -87,7 +86,7 @@ for index in xrange(corpus.num_terms):
         for k_c in xrange(k):
                 if not kDist or k_c not in kDist:
                         kDist[k_c] = [(vocab_word_dict[index],t_dist_w_i[k_c])]
-                elif len(kDist[k_c]) <= 7:
+                elif len(kDist[k_c]) <= 50:
                         m_list = kDist[k_c]
                         m_list.append((vocab_word_dict[index],t_dist_w_i[k_c]))
                         kDist[k_c] =  sorted(m_list,key = lambda t: t[1])
@@ -101,7 +100,7 @@ for index in xrange(corpus.num_terms):
                                         if score == minscore[1]:
                                                 mlist.remove((word,score))
                                                 mlist.append((vocab_word_dict[index],t_dist_w_i[k_c]))
-                                                kDist[k_c] =  sorted(mlist,key = lambda t: t[1])
+                                                kDist[k_c] =  sorted(mlist,key = lambda t: t[1],reverse=True)
                                                 break
 
 t1 = time.time()
