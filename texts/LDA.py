@@ -8,8 +8,8 @@ import sklearn
 
 t0 = time.time()
 k=100
-alpha = .01
-beta = .001
+alpha = .1
+beta = .01
 sampleFile = 'ap.txt'
 #sampleFile = 'ap2.text'
 sample_vocab = 'vocab.txt'
@@ -34,11 +34,11 @@ for doc_num,words in corpus.docs.iteritems():
         #words = set(vocab_index_dict.keys()) & set(words)
         #print 'On doc %d' % doc_num
         for word in words:
+                #m -pz = np.random.
 
-                pz = np.divide(np.multiply(DTMatrix[doc_num,:] + alpha,
-                        (TTMatrix[vocab_index_dict[word],:] + beta)),DTMatrix.sum(axis=0) + beta*corpus.num_terms)
-                sample_pz= np.random.multinomial(10, np.asarray(pz/pz.sum())[0],1)
-                topic = sample_pz.argmax()
+                topic = np.random.choice(k)
+                #sample_pz = np.random.multinomial(10, [1/100.]*k, 1)
+
                 #if we've seen the word in the document before and it's been assigned
                 #to a different topic
                 if (doc_num,word) not in  DocVocab:
@@ -51,10 +51,11 @@ for doc_num,words in corpus.docs.iteritems():
 
         #increase counters in matrices
         #increase count in Document topic matrix
-for i in xrange(250):
+for i in xrange(1000):
         print i
         for doc_num,words in corpus.docs.iteritems():
                 #words = set(vocab_index_dict.keys()) & set(words)
+
                 for word in words:
                         topic = DocVocab[(doc_num,word)]
                         TTMatrix[vocab_index_dict[word],topic]-=1
@@ -65,8 +66,7 @@ for i in xrange(250):
 
                         pz = np.divide(np.multiply(DTMatrix[doc_num,:] + alpha,
                         (TTMatrix[vocab_index_dict[word],:] + beta)),DTMatrix.sum(axis=0) + beta*corpus.num_terms)
-                        sample_pz  = np.random.multinomial(1, np.asarray(pz/pz.sum())[0],1)
-                        topic = sample_pz.argmax()
+                        topic  = np.random.multinomial(1, np.asarray(pz/pz.sum())[0],1).argmax()
 
                         DocVocab[(doc_num,word)] = topic
                         TTMatrix[vocab_index_dict[word],topic]+=1
